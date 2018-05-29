@@ -36,6 +36,8 @@ import math
 def verbose_output(msg):
     print >>sys.stderr, msg
 
+def print_baby(msg):
+    print >>sy.stderr, msg
 
 def hsl2rgb(*args):
     """Convert HSL color tuple to RGB.
@@ -799,7 +801,17 @@ def main():
                       ))
 
     options, args = parser.parse_args()
-    filenames = [fn2 for fn in args for fn2 in glob(fn)]
+    [fn2 for fn in args for fn2 in glob(fn)]
+    for fn in args:
+	if os.path.isdir(fn):
+	    filenames = []
+	    for root, dirs, files in os.walk(fn):
+	        for file in files:
+		    if file.endswith(".py"):
+			print >>sys.stderr, os.path.join(root, file)
+			filenames.append(os.path.join(root, file))
+	else:
+	    filenames = [fn2 for fn in args for fn2 in glob(fn)]
     if len(args) == 0:
         parser.error('Need one or more filenames to process')
 
